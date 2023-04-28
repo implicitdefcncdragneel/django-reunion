@@ -1,10 +1,13 @@
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework import generics, permissions, status
+
 from api.post.models import Post
 from api.post.permission import IsOwnerOrReadOnly
 
 
 from api.post.serializers import PostCreateSerializer
+from api.services.models import Reaction
 
 # Create your views here.
 class PostCreateAPIView(generics.CreateAPIView):
@@ -33,3 +36,21 @@ class PostDeleteAPIView(generics.DestroyAPIView):
             return Response("Post does not exist", status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response("Error occur while deleting post")
+    
+@api_view(('GET',))
+def get_all_post(request):
+    posts = Post.objects.filter(author=request.user).order_by('-created_at')
+
+    data = []
+    for post in posts:
+        _data = {
+            'id': post.id,
+            'title': post.title,
+            'desc': post.description,
+            'created_at': post.created_at,
+            'comments': [comment.comment for comment in post.comments.all()],
+            'likes': Reaction.objects.filter(post=post, reaction=1).count()
+        }
+        data.append(_data)
+
+    return Response(data)
