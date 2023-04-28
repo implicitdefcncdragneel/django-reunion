@@ -1,4 +1,7 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
 from rest_framework import permissions, status, generics
 
@@ -56,3 +59,15 @@ class CommentAPIView(generics.GenericAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Post.DoesNotExist:
             raise NotFound("Post does not exist")
+
+@api_view(('GET',))
+def get_post(request, id):
+    post = get_object_or_404(Post,id=id)
+    no_of_likes = Reaction.objects.filter(post=post, reaction=1).count()
+    total_comments = post.comments.count()
+    data = {
+        'post_id': post.id,
+        'no_of_likes': no_of_likes,
+        'total_comments': total_comments
+    }
+    return Response(data,status=status.HTTP_200_OK)

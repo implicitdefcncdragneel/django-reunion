@@ -1,7 +1,7 @@
 from django.urls import path
 from api.account.views import AuthenticateUserAPIView,FollowUnfollowAPIView
 from api.post.views import PostCreateAPIView,PostDeleteAPIView
-from api.services.views import CommentAPIView, ReactionAPIView
+from api.services.views import CommentAPIView, ReactionAPIView ,get_post
 
 urlpatterns = [
     path("authenticate/",AuthenticateUserAPIView.as_view(),name="authenticate-user"),
@@ -13,4 +13,5 @@ urlpatterns = [
     path("like/<str:id>/", ReactionAPIView.as_view(), name="like-post"),
     path("unlike/<str:id>/", ReactionAPIView.as_view(), name="unlike-post"),
     path("comment/<str:id>/", CommentAPIView.as_view(), name="comment-post"),
+    path("post/<str:id>/", get_post, name='get_post'),
 ]
