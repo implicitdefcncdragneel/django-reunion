@@ -37,3 +37,10 @@ This API provides functionalities for a social media platform, allowing users to
     - Created At: Date and time when the post was created
     - Comments: Array of comments for the particular post
     - Likes: Number of likes for the particular post
+
+## Contact
+
+For any questions or inquiries, please contact [chandranandan.chandrakar@gmail.com](mailto:chandranandan.chandrakar@gmail.com).
+
+**Note:** 
+Use the `reunion.postman_collection.json` attached with the repository to test the API.
